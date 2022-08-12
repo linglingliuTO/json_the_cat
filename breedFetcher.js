@@ -1,35 +1,33 @@
 const request = require('request');
 
-const catType = process.argv.slice(2)[0];
-
 //'http://www.example.edu '
 
-const website = `https://api.thecatapi.com/v1/breeds/search?q=${catType}`
 
 
+const fetchBreedDescription = function (breedName, callback) {
+  const website = `https://api.thecatapi.com/v1/breeds/search?q=${breedName}`
 
-request(website, (error, response, body) => {
+  request(website, (error, response, body) => {
+    if (error) {
+      callback(error, null); // Print the error if one occurred
+    } else {
+      const data = JSON.parse(body);
+      if (data[0] === undefined) {
+        callback(null, "cat not found")
+      } else {
+        callback(null, data[0].description);
+      }
 
- if (error) {
-    console.log('error:', error); // Print the error if one occurred
- }
-    const data = JSON.parse(body);
-
- if (data[0]=== undefined) {
-    console.log("Error: Cat Type not found ")
+    }
 
 
-  } else {
-    console.log(data[0].description);
   }
- 
-}
-  
 
 
+  )
+};
 
-
-)
+module.exports = { fetchBreedDescription }
 
 
 
